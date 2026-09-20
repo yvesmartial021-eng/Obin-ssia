@@ -1,0 +1,7 @@
+{
+  "name": "OBIN’SS IA",
+  "description": "Votre intelligence. Votre assistant. Votre avenir. Assistant IA polyvalent, rapide et moderne.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
+
