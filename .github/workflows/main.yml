@@ -1,13 +1,14 @@
-name: Build OBIN'SS IA APK
+name: Créer l'APK OBIN'SS IA
 
 on:
-  workflow_dispatch:
   push:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
   build:
+    name: Construire l'APK
     runs-on: ubuntu-latest
 
     steps:
@@ -21,16 +22,21 @@ jobs:
           java-version: '17'
 
       - name: Installer Android SDK
-        uses: android-actions/setup-android@v3
+        uses: android-actions/setup-android@v4
+        with:
+          packages: 'platform-tools'
 
-      - name: Donner les droits à Gradle
-        run: chmod +x ./gradlew
+      - name: Accepter les licences Android
+        run: yes | sdkmanager --licenses
 
       - name: Construire l'APK
-        run: ./gradlew assembleDebug
+        run: |
+          chmod +x gradlew
+          ./gradlew assembleDebug
 
       - name: Publier l'APK
         uses: actions/upload-artifact@v4
         with:
-          name: OBINSS-IA-APK
-          path: application/build/outputs/apk/debug/*.apk
+          name: OBIN-SS-IA-debug
+          path: |
+            **/build/outputs/apk/debug/*.apk
