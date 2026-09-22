@@ -1,4 +1,4 @@
-name: Créer l’APK OBIN’SS IA
+name: Créer l'APK OBIN'SS IA
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-    name: Construire l’APK
+    name: Construire l'APK
     runs-on: ubuntu-latest
 
     steps:
@@ -34,10 +34,22 @@ jobs:
       - name: Accepter les licences Android
         run: yes | sdkmanager --licenses
 
-      - name: Construire l’APK
-        run: gradle assembleDebug
+      - name: Générer le debug.keystore
+        run: |
+          keytool -genkeypair -v \
+            -keystore debug.keystore \
+            -storepass android \
+            -alias androiddebugkey \
+            -keypass android \
+            -keyalg RSA \
+            -keysize 2048 \
+            -validity 10000 \
+            -dname "CN=Android Debug,O=Android,C=US"
 
-      - name: Publier l’APK
+      - name: Construire l'APK
+        run: ./gradlew assembleDebug
+
+      - name: Publier l'APK
         uses: actions/upload-artifact@v4
         with:
           name: OBIN-SS-IA-debug
