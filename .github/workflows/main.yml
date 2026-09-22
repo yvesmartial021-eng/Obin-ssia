@@ -1,10 +1,15 @@
-- name: Installer Gradle 9.3.1
-  uses: gradle/actions/setup-gradle@v6
-  with:
-    gradle-version: '9.3.1'
+name: Créer l’APK OBIN’SS IA
 
-- name: Construire l’APK
-  run: gradle assembleDebug
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    name: Construire l’APK
+    runs-on: ubuntu-latest
 
     steps:
       - name: Récupérer le projet
@@ -21,15 +26,18 @@
         with:
           packages: 'platform-tools'
 
+      - name: Installer Gradle 9.3.1
+        uses: gradle/actions/setup-gradle@v6
+        with:
+          gradle-version: '9.3.1'
+
       - name: Accepter les licences Android
         run: yes | sdkmanager --licenses
 
-      - name: Construire l'APK
-        run: |
-          chmod +x gradlew
-          ./gradlew assembleDebug
+      - name: Construire l’APK
+        run: gradle assembleDebug
 
-      - name: Publier l'APK
+      - name: Publier l’APK
         uses: actions/upload-artifact@v4
         with:
           name: OBIN-SS-IA-debug
